@@ -1,30 +1,18 @@
-"use client"
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useLogOut } from "@/features/auth/api/use-logout";
-import { useCurrent } from "@/features/auth/api/usecurrent";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 
-export default function Home() {
-    const router = useRouter();
-    const { data , isLoading} = useCurrent();
-    const { mutate } = useLogOut();
+import { getCurrent } from "@/features/auth/actions";
+import { UserButton } from "@/features/auth/components/user-button";
+import { redirect } from "next/navigation";
 
-    useEffect(()=> {
-        if(!data && !isLoading)
-        {
-            router.push("/sign-in");
-        }
-    },[data]);
+export default async function Home() {
+    const user = await  getCurrent();
+
+    if(!user ) redirect("/sign-in")
+    
 
   return (
     <div>
-        Only visible to authrozied Users
-        <Button onClick={()=> mutate()}>
-            LogOut
-        </Button>
+        <UserButton />
   
     </div>
   );
