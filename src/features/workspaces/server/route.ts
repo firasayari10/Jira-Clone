@@ -7,6 +7,17 @@ import { ID } from "node-appwrite";
 import { buffer } from "stream/consumers";
 
 const app = new Hono()
+.get("/", sessionMiddleware,
+    async(c)=> {
+        const databases = c.get("databases");
+        const workspaces = await databases.listDocuments(
+            DATABSE_ID,
+            WORKSPACES_ID
+        );
+
+        return c.json({ data:workspaces})
+    }
+)
 .post(
     "/",
     zValidator("form", createWorkspaceSchema),sessionMiddleware,
