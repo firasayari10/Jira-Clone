@@ -28,13 +28,15 @@ import { Avatar
     ,AvatarFallback,
     
 } from "@radix-ui/react-avatar";
-import { ArrowLeftIcon, ImageIcon } from "lucide-react";
+import { ArrowLeftIcon, CopyIcon, ImageIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Workspace } from "../types";
 import { useUpdateWorkspace } from "../api/use-update-workpsace";
 import { useConfirm } from "@/hooks/use-confirm";
-import { useDeleteWorkspace } from "../api/use-delete-workpsace copy";
+import { useDeleteWorkspace } from "../api/use-delete-workpsace";
+import { toast } from "sonner";
+import { useResetInviteCode } from "../api/use-reset-invite-code";
 
 
 interface EditWorkspaceFormProps {
@@ -48,6 +50,8 @@ export const EditWorkspaceForm = ({onCancel , intialValues}:EditWorkspaceFormPro
     const inputRef = useRef<HTMLInputElement>(null);
     const [DeleteDialog,confirmDelete ]=useConfirm("Delete Workspace" , "This Action cannot be undone ","destructive");
     const {mutate:DeleteWorkspace , isPending:isDeletingWorkspace}= useDeleteWorkspace();
+    const {mutate:resetInviteCode , isPending:isResettingInviteCode}= useResetInviteCode();
+    const [ResetCodeDialog,confirmReset ]=useConfirm("Reset Invite Code " , "Once a new codeis Generated the current invite code will be obsolete","destructive");
 
     const form = useForm<z.infer<typeof updateWorkspaceSchema>>({
         resolver:zodResolver(updateWorkspaceSchema), 
@@ -67,6 +71,19 @@ export const EditWorkspaceForm = ({onCancel , intialValues}:EditWorkspaceFormPro
         },{
             onSuccess:()=>{
                 window.location.href= "/"
+            }
+        })
+    }
+    const handleReset =async ()=> {
+        const ok = await confirmReset();
+        if(!ok) return;
+
+        resetInviteCode({
+            param:{workspaceId:intialValues.$id}
+        },{
+            onSuccess:()=>{
+                router.refresh();
+                
             }
         })
     }
@@ -92,9 +109,17 @@ export const EditWorkspaceForm = ({onCancel , intialValues}:EditWorkspaceFormPro
             form.setValue("image",file)
         }
     }
+    const fullInviteLink =`${window.location.origin}/workspaces/${intialValues.$id}/join/${intialValues.inviteCode}`
+
+    const handleCopyInviteLink = ()=>
+    {
+        navigator.clipboard.writeText(fullInviteLink)
+        .then(()=>toast.success("Invited Link copied to Clipboard"))
+    }
 
     return (<div className="flex flex-col gap-y-4">
         <DeleteDialog/>
+        <ResetCodeDialog />
 
       
     <Card className="w-full h-full border-none shadow-none">
@@ -244,6 +269,48 @@ export const EditWorkspaceForm = ({onCancel , intialValues}:EditWorkspaceFormPro
         <CardContent className="p-7" >
             <div className="flex flex-col">
                 <h3 className="font-bold">
+                    Invite Members
+
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                    Use the Invite Link to invtie memebrs to your workspace
+
+                </p>
+                <div className="mt-4">
+                    <div className="flex items-center gap-x-2">
+                        <Input disabled value ={fullInviteLink}/>
+                        <Button
+                        onClick={handleCopyInviteLink}
+                        variant="secondary"
+                        className="size-12" >
+                            <CopyIcon className="size-5"/>
+
+                        </Button>
+
+                    </div>
+
+                </div>
+                <DottedSeperator className="py-7"/>
+                <Button 
+                className="mt-6 w-fit ml-auto"
+                size="sm"
+                variant="destructive"
+                type="button"
+                disabled={isPending || isResettingInviteCode}
+                onClick={handleReset}>
+                    Reset Invite Link
+                </Button>
+
+            </div>
+
+        </CardContent>
+
+    </Card>
+    <Card className="w-full h-full border-none shadow-none">
+        <CardContent className="p-7" >
+            <div className="flex flex-col">
+                
+                <h3 className="font-bold">
                     Danger Zone
 
                 </h3>
@@ -251,6 +318,7 @@ export const EditWorkspaceForm = ({onCancel , intialValues}:EditWorkspaceFormPro
                     Deleting a workspace is a irreversible and will remove all associated data
 
                 </p>
+                <DottedSeperator className="py-7"/>
                 <Button 
                 className="mt-6 w-fit ml-auto"
                 size="sm"
