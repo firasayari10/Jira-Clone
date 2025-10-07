@@ -8,6 +8,10 @@ import { createAdminClient } from "@/lib/appwrite";
 import { AUTH_COOKIE } from "../constants";
 
 import { sessionMiddleware } from "@/lib/session-middleware";
+import { UpdateProjectSchema } from "@/features/projects/schemas";
+import { Project } from "@/features/projects/types";
+import { DATABSE_ID, IMAGES_BUCKET_ID, PROJECTS_ID } from "@/config";
+import { getMember } from "@/features/members/utils";
 
 const app = new Hono()
 .get("/current",
@@ -16,6 +20,7 @@ const app = new Hono()
         return c.json({data:user})
     }
 )
+
 .post(
     "/login",
     zValidator("json", loginSchema),
@@ -76,4 +81,5 @@ const app = new Hono()
     return c.json({success:true})
 
 })
+
 export default app ;
