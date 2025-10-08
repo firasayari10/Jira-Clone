@@ -9,6 +9,7 @@ import { createProjectSchema, UpdateProjectSchema } from "../schemas";
 import { generateInviteCode } from "@/lib/utils";
 import { MemberRole } from "@/features/members/types";
 import { Project } from "../types";
+import { getWorkspace } from "@/features/workspaces/queries";
 
 const app = new Hono()
 .get(
@@ -156,5 +157,39 @@ const app = new Hono()
         return c.json({data:project})
     }
 
+)
+.delete(
+    "/:projectId",
+    sessionMiddleware,
+    async(c) => {
+        const databases = c.get("databases");
+        
+        const user = c.get("user");
+        const { projectId} = c.req.param();
+          const existingProject = await databases.getDocument<Project>(
+            DATABSE_ID,
+            PROJECTS_ID,
+            projectId
+        )
+
+        const member =await getMember({
+            databases,
+            workspaceId: existingProject.workspaceId,
+            userId: user.$id
+        });
+
+        if (!member )
+        {
+            return c.json({error: "unauthorized"}, 401);
+        }
+
+        await databases.deleteDocument(
+            DATABSE_ID,
+            PROJECTS_ID,
+            projectId
+        );
+
+        return c.json({data : { $id: existingProject.$id}});
+    }
 )
 export default app ;
