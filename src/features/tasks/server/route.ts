@@ -1,13 +1,13 @@
 import { sessionMiddleware } from "@/lib/session-middleware";
 import { zValidator } from "@hono/zod-validator";
 import {Hono} from "hono" ;
-import { createTaskSchema } from "../components/schemas";
+import { createTaskSchema } from "../schemas";
 import { getMember } from "@/features/members/utils";
 import { DATABSE_ID, MEMBERS_ID, PROJECTS_ID, TASKS_ID } from "@/config";
 import { ID, Query } from "node-appwrite";
 import { stat } from "fs";
 import z, { nullish } from "zod";
-import { TaskStatus } from "../components/types";
+import { TaskStatus } from "../types";
 import { createAdminClient } from "@/lib/appwrite";
 import { Project } from "@/features/projects/types";
 
