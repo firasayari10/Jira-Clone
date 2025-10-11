@@ -7,7 +7,7 @@ import { DATABSE_ID, MEMBERS_ID, PROJECTS_ID, TASKS_ID } from "@/config";
 import { ID, Query } from "node-appwrite";
 import { stat } from "fs";
 import z, { nullish } from "zod";
-import { TaskStatus } from "../types";
+import { Task, TaskStatus } from "../types";
 import { createAdminClient } from "@/lib/appwrite";
 import { Project } from "@/features/projects/types";
 
@@ -138,7 +138,7 @@ const app = new Hono()
             query.push(Query.search("name",search))
         }
         
-        const tasks = await databases.listDocuments(
+        const tasks = await databases.listDocuments<Task>(
             DATABSE_ID,
             TASKS_ID,
             query,
