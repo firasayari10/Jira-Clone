@@ -33,7 +33,7 @@ export const KanbanCard = ({task}:KanbanCardProps)=>{
       fallbackClassName="text-[10px]"
     />
 
-    {/* Small dot separator */}
+    
     <div className="size-1 rounded-full bg-neutral-300" />
 
     <TaskDate value={task.dueDate} className="text-xs" />
