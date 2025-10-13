@@ -23,10 +23,11 @@ type TaskState = {
 }
 
 interface DataKanbanProps{
-    data: Task[]
+    data: Task[];
+    onChange: (tasks:{$id:string ; status:TaskStatus ; position:number }[])=>void;
 }
 
-export const DataKanban = ({ data}:DataKanbanProps)=>{
+export const DataKanban = ({ data , onChange}:DataKanbanProps)=>{
 
     const  [tasks,setTasks] = useState<TaskState> (()=>{
         const intialTasks:TaskState = {
@@ -52,79 +53,84 @@ export const DataKanban = ({ data}:DataKanbanProps)=>{
 
 
     });
+    
 
-    const onDragEnd = useCallback((result: DropResult)=>{
-        if(!result.destination)return;
+    const onDragEnd = useCallback((result: DropResult) => {
+        if (!result.destination) return;
 
-        const {source , destination} = result;
-        const sourceStatus = source.droppableId as TaskStatus ;
+        const { source, destination } = result;
+        const sourceStatus = source.droppableId as TaskStatus;
         const destStatus = destination.droppableId as TaskStatus;
 
-        let updatesPayLoad: {$id: string ; status: TaskStatus, postion: number; }
+        
+        let updatesPayLoad: { $id: string; status: TaskStatus; position: number }[] = [];
 
-        setTasks((prevTasks)=>{
-            const newTasks = {...prevTasks};
+        setTasks((prevTasks) => {
+            const newTasks = { ...prevTasks };
 
             const sourceColumn = [...newTasks[sourceStatus]];
-            const [movedTask] = sourceColumn.splice(source.index,1);
+            const [movedTask] = sourceColumn.splice(source.index, 1);
 
-            if(!movedTask){
-                console.error("No task found at the source index ");
-            return prevTasks            
-                } 
+            if (!movedTask) {
+            console.error("No task found at the source index");
+            return prevTasks;
+            }
 
-            const updatedMovedTask = sourceStatus !== destStatus
-                ? {...movedTask , status:destStatus}: movedTask;
+            const updatedMovedTask =
+            sourceStatus !== destStatus
+                ? { ...movedTask, status: destStatus }
+                : movedTask;
 
             newTasks[sourceStatus] = sourceColumn;
 
-
             const destColumn = [...newTasks[destStatus]];
-            destColumn.splice(destination.index,0, updatedMovedTask );
-            newTasks[destStatus] = destColumn ;
+            destColumn.splice(destination.index, 0, updatedMovedTask);
+            newTasks[destStatus] = destColumn;
 
+            
+            updatesPayLoad = [];
+            updatesPayLoad.push({
+            $id: updatedMovedTask.$id,
+            status: destStatus,
+            position: Math.min((destination.index + 1) * 1000, 1_000_000),
+            });
 
-           const updatesPayLoad = [];
-                    updatesPayLoad.push({
-                    $id: updatedMovedTask.$id,
+            newTasks[destStatus].forEach((task, index) => {
+            if (task && task.$id !== updatedMovedTask.$id) {
+                const newPosition = Math.min((index + 1) * 1000, 1_000_000);
+                if (task.position !== newPosition) {
+                updatesPayLoad.push({
+                    $id: task.$id,
                     status: destStatus,
-                    position: Math.min((destination.index + 1) * 1000, 1_000_000),
-                    });
-
-        newTasks[destStatus].forEach((task,index)=>{
-            if(task && task.$id !== updatedMovedTask.$id)
-            {
-                const newPosition = Math.min((index+1)* 1000, 1_000_000);
-                if(task.position !== newPosition)
-                {
-                    updatesPayLoad.push({
-                        $id: task.$id,
-                        status: destStatus,
-                        position: newPosition,
-                    });
+                    position: newPosition,
+                });
                 }
             }
+            });
+
+            
+            if (sourceStatus !== destStatus) {
+            newTasks[sourceStatus].forEach((task, index) => {
+                if (task) {
+                const newPosition = Math.min((index + 1) * 1000, 1_000_000);
+                if (task.position !== newPosition) {
+                    updatesPayLoad.push({
+                    $id: task.$id,
+                    status: sourceStatus,
+                    position: newPosition,
+                    });
+                }
+                }
+            });
+            }
+
+            return newTasks;
         });
 
-        if(sourceStatus !== destStatus){
-            newTasks[sourceStatus].forEach((task,index)=>{
-                if(task){
-                    const newPosition = Math.min((index +1)* 1000, 1_000_000);
-                    if(task.position !== newPosition){
-                        updatesPayLoad.push({
-                            $id:task.$id,
-                            status:sourceStatus,
-                            position:newPosition
-                        })
-                    }
-                }
-            })
-        }
-        return newTasks;
+        
+        onChange(updatesPayLoad);
+        }, [onChange]);
 
-        })
-
-    },[])
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
