@@ -130,8 +130,8 @@ export const DataFilters = ({ hideProjectFilter}:DataFiltesProps)=> {
                 </SelectContent>
 
             </Select>
-
-            <Select defaultValue={projectId ?? undefined}
+            {!hideProjectFilter && (
+                <Select defaultValue={projectId ?? undefined}
             onValueChange={(value)=>onProjectChange(value)}>
                 <SelectTrigger className="w-full lg:w-auto h-8">
                     <div className="flex items-center pr-2">
@@ -158,6 +158,8 @@ export const DataFilters = ({ hideProjectFilter}:DataFiltesProps)=> {
                 </SelectContent>
 
             </Select>
+            )}
+            
             <DatePicker
             placeholder="Due Date" 
             className="h-8 w-full lg:w-auto"
