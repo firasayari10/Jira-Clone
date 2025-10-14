@@ -47,9 +47,16 @@ export const TaskDescription =({
             {isEditing ? (
                 <div className="flex flex-col gap-y-4"> 
                 <Textarea
-                >
+                    placeholder="Add a description"
+                    value={value}
+                    rows={4}
+                    onChange={(e)=> setValue(e.target.value)}
+                    disabled={isPending}
+                />
+                <Button size="sm" className="w-fit ml-auto" onClick={handleSave} disabled={isPending}>
+                    {isPending ? " Saving ..." : "Save Changes "}
 
-                </Textarea>
+                </Button>
                     </div>
             ):(
                   <div>
