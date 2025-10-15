@@ -89,13 +89,7 @@ export const EditWorkspaceForm = ({onCancel , intialValues}:EditWorkspaceFormPro
         }
         mutate({form:finalValues ,
             param: {workspaceId : intialValues.$id}
-        } , {
-            onSuccess:( )=>{
-                form.reset();
-                
-                //router.push(`/workspaces/${data.$id}`);
-            }
-        })
+        } , )
     }
     const  handleImageChange = (e: React.ChangeEvent<HTMLInputElement>)=>{
         const file = e.target.files?.[0];

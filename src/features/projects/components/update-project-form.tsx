@@ -86,13 +86,7 @@ export const EditProjectForm = ({onCancel , intialValues}:EditProjectFormProps) 
         }
         mutate({form:finalValues ,
             param: {projectId : intialValues.$id}
-        } , {
-            onSuccess:( )=>{
-                form.reset();
-                
-                //router.push(`/workspaces/${data.$id}`);
-            }
-        })
+        } )
     }
     const  handleImageChange = (e: React.ChangeEvent<HTMLInputElement>)=>{
         const file = e.target.files?.[0];

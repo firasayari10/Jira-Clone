@@ -19,10 +19,10 @@ export const TaskDescription =({
     const { mutate,isPending}=useUpdateTask();
 
     const handleSave = ()=>{
-        mutate:({
-            json: {description: value},
+        mutate({
+            json:{description: value},
             param:{taskId:task.$id}
-        })
+        });
     }
 
 
