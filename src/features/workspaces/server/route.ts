@@ -275,5 +275,25 @@ const app = new Hono()
 
     }
 )
+.get(
+    "/:workspaceId/info",
+    sessionMiddleware,
+    async(c)=>{
+        const user = c.get("user");
+        const databases = c.get("databases")
+        const {workspaceId} = c.req.param();
+
+        
+        
+        const workspace = await databases.getDocument<Workspace>(
+            DATABSE_ID,
+            WORKSPACES_ID,
+            workspaceId
+        )
+
+        return c.json({data: {$id:workspace.$id , name: workspace.name , imageUrl:workspace.imageUrl} })
+
+    }
+)
 
 export default app ; 
