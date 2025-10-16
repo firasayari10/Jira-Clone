@@ -15,7 +15,7 @@ import {
 import { ListChecksIcon, UserIcon } from "lucide-react";
 import { TaskStatus } from "../types";
 import { useTaskFilters } from "../hooks/use-task-filters";
-import { Project } from "@/features/projects/types";
+
 
 interface DataFiltesProps {
     hideProjectFilter ?: boolean ;

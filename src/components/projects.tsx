@@ -6,7 +6,6 @@ import { RiAddCircleFill } from "react-icons/ri"
 import {usePathname} from "next/navigation"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
-import { useCreateProject } from "@/features/projects/api/use-create-project"
 import { useCreateProjectModal } from "@/features/projects/hooks/use-create-project-modal"
 import { ProjectAvatar } from "@/features/projects/components/project-avatar"
 export const Projects =()=> {
@@ -16,7 +15,7 @@ export const Projects =()=> {
     const {open}= useCreateProjectModal()
     const workspaceId= useWorkspaceId();
     const {data} = useGetProjects({workspaceId})
-    const projectId=null;
+    
      return (
        <div className="flex flex-col gap-y-2">
             <div className="flex items-center justify-between">

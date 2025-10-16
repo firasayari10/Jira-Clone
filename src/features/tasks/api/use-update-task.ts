@@ -30,8 +30,8 @@ export const useUpdateTask = () => {
         toast.success("Task Updated");
         
       
-      queryClient.invalidateQueries({queryKey: ["tasks"]}),
-      queryClient.invalidateQueries({queryKey: ["task",data.$id]})
+      queryClient.invalidateQueries({queryKey: ["tasks"]});
+      queryClient.invalidateQueries({queryKey: ["task",data.$id]});
     }
     ,
     onError:()=> { 

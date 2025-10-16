@@ -2,7 +2,7 @@ import { zValidator } from "@hono/zod-validator";
 import {Hono} from "hono" ;
 import { createWorkspaceSchema, updateWorkspaceSchema } from "../schemas";
 import { sessionMiddleware } from "@/lib/session-middleware";
-import { DATABSE_ID, IMAGES_BUCKET_ID, MEMBERS_ID, PROJECTS_ID, TASKS_ID, WORKSPACES_ID } from "@/config";
+import { DATABSE_ID, IMAGES_BUCKET_ID, MEMBERS_ID, TASKS_ID, WORKSPACES_ID } from "@/config";
 import { ID , Query} from "node-appwrite";
 
 import { MemberRole } from "@/features/members/types";
@@ -12,7 +12,7 @@ import z from "zod";
 import { Workspace } from "../types";
 
 import { endOfMonth , startOfMonth , subMonths} from "date-fns";
-import { Project } from "@/features/projects/types";
+
 import { TaskStatus } from "@/features/tasks/types";
 
 const app = new Hono()
@@ -282,7 +282,7 @@ const app = new Hono()
     "/:workspaceId/info",
     sessionMiddleware,
     async(c)=>{
-        const user = c.get("user");
+        
         const databases = c.get("databases")
         const {workspaceId} = c.req.param();
 

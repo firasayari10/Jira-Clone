@@ -23,10 +23,9 @@ import {
 import { DottedSeperator } from "@/components/dotted-seperator";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+
 import { cn } from "@/lib/utils";
-import { useCreateTask } from "../api/use-create-task";
-import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
+
 import { DatePicker } from "@/components/ui/date-picker";
 import {
     Select,
@@ -49,8 +48,7 @@ interface EditTaskFormProps {
 };
 
 export const EditTaskForm = ({onCancel , projectOptions , memberOptions, intialValues}:EditTaskFormProps) => {
-    const workspaceId= useWorkspaceId()
-    const router= useRouter()
+    
     const {mutate , isPending} = useUpdateTask();
     
 
@@ -68,7 +66,7 @@ export const EditTaskForm = ({onCancel , projectOptions , memberOptions, intialV
     const onSubmit = ( values:z.infer<typeof createTaskSchema>) => {
        
         mutate({json:values , param:{taskId:intialValues.$id}} , {
-            onSuccess:({data})=>{
+            onSuccess:()=>{
                 form.reset();
                 onCancel?.();
                 

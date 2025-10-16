@@ -4,7 +4,7 @@ import { DottedSeperator } from "@/components/dotted-seperator";
 import { PageError } from "@/components/page-error";
 import { PageLoader } from "@/components/page-loader";
 import { useGetTask } from "@/features/tasks/api/use-get-task";
-import { DataKanban } from "@/features/tasks/components/data-kanban";
+
 import { TaskBreadcrumbs } from "@/features/tasks/components/task-bread-crumbs";
 import { TaskDescription } from "@/features/tasks/components/task-description";
 import { TaskOverview } from "@/features/tasks/components/tasks-overview";

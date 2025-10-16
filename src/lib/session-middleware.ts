@@ -15,12 +15,12 @@ import {
     type Storage as StorageType,
     type Users as UsersType,
 }from "node-appwrite"
-import { Mode } from "fs";
+
 
 type AdditionalContext = {
     Variables: {
         account : AccountType;
-        databases:Databases;
+        databases:DatabasesType;
         storage:StorageType;
         users:UsersType;
         user:Models.User<Models.Preferences>;

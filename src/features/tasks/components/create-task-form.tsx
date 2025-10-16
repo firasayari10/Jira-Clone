@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import {useRef} from "react"
+
 import { createTaskSchema } from "../schemas";
 import z from "zod";
 import { Card 
@@ -23,7 +23,7 @@ import {
 import { DottedSeperator } from "@/components/dotted-seperator";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+
 import { cn } from "@/lib/utils";
 import { useCreateTask } from "../api/use-create-task";
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
@@ -48,7 +48,7 @@ interface CreateTasksFormProps {
 
 export const CreateTaskForm = ({onCancel , projectOptions , memberOptions}:CreateTasksFormProps) => {
     const workspaceId= useWorkspaceId()
-    const router= useRouter()
+   
     const {mutate , isPending} = useCreateTask();
     
 
@@ -65,7 +65,7 @@ export const CreateTaskForm = ({onCancel , projectOptions , memberOptions}:Creat
     const onSubmit = ( values:z.infer<typeof createTaskSchema>) => {
        
         mutate({json:{...values , workspaceId}} , {
-            onSuccess:({data})=>{
+            onSuccess:({})=>{
                 form.reset();
                 onCancel?.();
                 

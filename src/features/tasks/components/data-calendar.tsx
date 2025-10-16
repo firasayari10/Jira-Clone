@@ -15,8 +15,7 @@ import "./data-calendar.css"
 import {Calendar, dateFnsLocalizer} from "react-big-calendar";
 import { EventCard } from "./EventCard";
 
-import { Button } from "@/components/ui/button";
-import { CalendarIcon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+
 import { CustomToolbar } from "./custom-tool-bar";
 const locales = {
     "en-US":enUS

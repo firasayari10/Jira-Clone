@@ -4,7 +4,7 @@ import {
     Avatar,
     AvatarFallback
 } from "@/components/ui/avatar";
-import { AvatarImage } from "@radix-ui/react-avatar";
+
 
 interface MemberAvatarProps {
     
