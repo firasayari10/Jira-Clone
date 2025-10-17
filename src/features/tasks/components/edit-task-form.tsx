@@ -47,30 +47,29 @@ interface EditTaskFormProps {
     intialValues: Task
 };
 
+const editTaskFormSchema = createTaskSchema.omit({workspaceId: true, description: true}).extend({
+    dueDate: z.date(),
+});
+
 export const EditTaskForm = ({onCancel , projectOptions , memberOptions, intialValues}:EditTaskFormProps) => {
     
     const {mutate , isPending} = useUpdateTask();
     
 
-    const form = useForm<z.infer<typeof createTaskSchema>>({
-        resolver:zodResolver(createTaskSchema.omit({workspaceId:true , description:true }))as any, 
-        defaultValues:{
+    const form = useForm<z.infer<typeof editTaskFormSchema>>({
+        resolver: zodResolver(editTaskFormSchema), 
+        defaultValues: {
             ...intialValues,
-            dueDate:intialValues.dueDate ? new Date(intialValues.dueDate) : undefined
-
-            
-
+            dueDate: intialValues.dueDate ? new Date(intialValues.dueDate) : undefined
         }
     });
 
-    const onSubmit = ( values:z.infer<typeof createTaskSchema>) => {
+    const onSubmit = (values: z.infer<typeof editTaskFormSchema>) => {
        
-        mutate({json:values , param:{taskId:intialValues.$id}} , {
-            onSuccess:()=>{
+        mutate({json: values, param: {taskId: intialValues.$id}}, {
+            onSuccess: () => {
                 form.reset();
                 onCancel?.();
-                
-               
             }
         })
     }
@@ -155,7 +154,7 @@ export const EditTaskForm = ({onCancel , projectOptions , memberOptions, intialV
 
                                             </div>
                                         </SelectItem>
-                                            ))}
+                                    ))}
 
                                 </SelectContent>
 
@@ -228,7 +227,7 @@ export const EditTaskForm = ({onCancel , projectOptions , memberOptions, intialV
                             onValueChange={field.onChange}>
                                 <FormControl>
                                     <SelectTrigger>
-                                        <SelectValue  placeholder="Select Assignee"/>
+                                        <SelectValue  placeholder="Select Project"/>
                                           
                                     </SelectTrigger>
                                 </FormControl>
@@ -245,7 +244,7 @@ export const EditTaskForm = ({onCancel , projectOptions , memberOptions, intialV
 
                                             </div>
                                         </SelectItem>
-                                            ))}
+                                    ))}
 
                                 </SelectContent>
 

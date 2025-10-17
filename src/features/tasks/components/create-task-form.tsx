@@ -46,30 +46,29 @@ interface CreateTasksFormProps {
     memberOptions:{id:string,name:string}[]
 };
 
+const createTaskFormSchema = createTaskSchema.extend({
+    dueDate: z.date(),
+});
+
 export const CreateTaskForm = ({onCancel , projectOptions , memberOptions}:CreateTasksFormProps) => {
-    const workspaceId= useWorkspaceId()
+    const workspaceId = useWorkspaceId();
    
     const {mutate , isPending} = useCreateTask();
     
 
-    const form = useForm<z.infer<typeof createTaskSchema>>({
-        resolver:zodResolver(createTaskSchema.omit({workspaceId:true}))as any, 
-        defaultValues:{
-            name:"",
-            workspaceId
-            
-
+    const form = useForm<z.infer<typeof createTaskFormSchema>>({
+        resolver: zodResolver(createTaskFormSchema),
+        defaultValues: {
+            workspaceId,
         }
     });
 
-    const onSubmit = ( values:z.infer<typeof createTaskSchema>) => {
+    const onSubmit = (values: z.infer<typeof createTaskFormSchema>) => {
        
-        mutate({json:{...values , workspaceId}} , {
-            onSuccess:({})=>{
+        mutate({json: values}, {
+            onSuccess: ({}) => {
                 form.reset();
                 onCancel?.();
-                
-               
             }
         })
     }
@@ -154,7 +153,7 @@ export const CreateTaskForm = ({onCancel , projectOptions , memberOptions}:Creat
 
                                             </div>
                                         </SelectItem>
-                                            ))}
+                                    ))}
 
                                 </SelectContent>
 
@@ -227,7 +226,7 @@ export const CreateTaskForm = ({onCancel , projectOptions , memberOptions}:Creat
                             onValueChange={field.onChange}>
                                 <FormControl>
                                     <SelectTrigger>
-                                        <SelectValue  placeholder="Select Assignee"/>
+                                        <SelectValue  placeholder="Select Project"/>
                                           
                                     </SelectTrigger>
                                 </FormControl>
@@ -244,7 +243,7 @@ export const CreateTaskForm = ({onCancel , projectOptions , memberOptions}:Creat
 
                                             </div>
                                         </SelectItem>
-                                            ))}
+                                    ))}
 
                                 </SelectContent>
 

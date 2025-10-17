@@ -5,7 +5,7 @@ import { SignInCard } from "@/features/auth/components/sign-in-card";
 import { redirect } from "next/navigation";
 
 
-export const SignInPage = async()=> {
+ const SignInPage = async()=> {
     const user = await getCurrent();
     if(user) redirect("/")
     return (<div>

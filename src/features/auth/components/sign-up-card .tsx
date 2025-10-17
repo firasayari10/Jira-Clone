@@ -25,6 +25,7 @@ import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import { useRegister } from "../api/use-register"
 import { registerSchema } from "../schemas"
+import { signUpWithGoogle , signUpWithGithub} from "@/lib/oauthh"
 
 
 
@@ -141,7 +142,8 @@ export const SignUpCard = () => {
             disabled={isPending}
             variant="secondary"
             size="lg"
-            className="w-full">
+            className="w-full"
+            onClick={()=>signUpWithGoogle}>
                 <FcGoogle className="mr-2 size-5"/>
                 Continue with Google 
 
@@ -150,7 +152,8 @@ export const SignUpCard = () => {
             disabled={isPending}
             variant="secondary"
             size="lg"
-            className="w-full">
+            className="w-full"
+            onClick={()=>signUpWithGithub()}>
                 <FaGithub  className="mr-2 size-5" />
                 Continue with Github
             </Button>

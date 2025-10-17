@@ -6,7 +6,7 @@ interface StandAloneLayoutProps{
     children:React.ReactNode
 }
 
-export const StandAloneLayout =( {children}:StandAloneLayoutProps) =>{
+const StandAloneLayout =( {children}:StandAloneLayoutProps) =>{
     return (
         <main className="bg-neutral-100 min-h-screen">
             <div className="mx-auto max-w-screen-2xl p-4">
